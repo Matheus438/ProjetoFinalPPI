@@ -9,9 +9,9 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const host = "0.0.0.0";
-const porta = process.env.PORT || 3000; // Vercel will set PORT
+const porta = process.env.PORT || 3000;
 
-// Dados em memória (substituir por banco em produção)
+// Dados em memória
 const equipes = []; // { id, nome, capitao, contato }
 const jogadores = []; // { id, nome, nick, funcao, elo, genero, equipeId }
 let nextEquipeId = 1;
@@ -27,7 +27,6 @@ app.use(session({
   cookie: { maxAge: 1000 * 60 * 30 } // 30 minutos
 }));
 
-// --- Helpers ---
 function verificaUserLogado(req, res, next) {
   if (req.session.dadosLogin?.logado) return next();
   return res.redirect('/login');
@@ -51,7 +50,7 @@ function renderBasePage(title, bodyHtml) {
 </html>`;
 }
 
-// --- Rotas ---
+//Rotas
 app.get('/', verificaUserLogado, (req, res) => {
   const ultimoAcesso = req.cookies?.ultimoAcesso;
   const agora = new Date();
@@ -78,7 +77,7 @@ app.get('/', verificaUserLogado, (req, res) => {
 
 // Login
 app.get('/login', (req, res) => {
-  // simples formulário de login com usuário único
+  //formulário de login 
   const body = `
   <div class="row justify-content-center">
     <div class="col-12 col-md-6">
@@ -101,7 +100,7 @@ app.get('/login', (req, res) => {
 
 app.post('/login', (req, res) => {
   const { usuario, senha } = req.body;
-  // credenciais fixas conforme enunciado (pode ser alterado)
+  // credenciais fixas de login
   if (usuario === 'admin' && senha === '12345') {
     req.session.dadosLogin = { nome: 'Admin', logado: true };
     // salvar último acesso via cookie será feito na rota /
@@ -116,7 +115,7 @@ app.get('/logout', (req, res) => {
   });
 });
 
-// --- Equipe: criar e listar ---
+// Equipe: criar e listar
 app.get('/equipes/novo', verificaUserLogado, (req, res) => {
   const body = `
   <div class="card p-3" style="max-width:720px;margin:0 auto;">
@@ -145,7 +144,7 @@ app.get('/equipes/novo', verificaUserLogado, (req, res) => {
 
 app.post('/equipes', verificaUserLogado, (req, res) => {
   const { nome, capitao, contato } = req.body;
-  // Validação server-side
+  // Validação
   if (!nome?.trim() || !capitao?.trim() || !contato?.trim()) {
     return res.send(renderBasePage('Erro - Cadastro Equipe', `<div class="alert alert-danger">Todos os campos são obrigatórios.</div><a class="btn btn-secondary" href="/equipes/novo">Voltar</a>`));
   }
@@ -176,9 +175,9 @@ app.get('/equipes/listar', verificaUserLogado, (req, res) => {
   res.send(renderBasePage('Lista de Equipes', html));
 });
 
-// --- Jogador: criar e listar (agrupado por equipe) ---
+// Jogador: criar e listar agrupado por equipe 
 app.get('/jogadores/novo', verificaUserLogado, (req, res) => {
-  // Renderiza select de equipes no servidor
+  // Renderiza select de equipes
   if (equipes.length === 0) {
     return res.send(renderBasePage('Cadastrar Jogador', `<div class="alert alert-warning">Não existem equipes cadastradas. Cadastre uma equipe antes de adicionar jogadores.</div><a class="btn btn-primary" href="/equipes/novo">Cadastrar Equipe</a> <a class="btn btn-secondary ms-2" href="/">Voltar</a>`));
   }
@@ -232,8 +231,6 @@ app.get('/jogadores/novo', verificaUserLogado, (req, res) => {
           <option value="">Selecione...</option>
           <option>Masculino</option>
           <option>Feminino</option>
-          <option>Outro</option>
-          <option>Prefiro não dizer</option>
         </select>
       </div>
 
@@ -258,7 +255,7 @@ app.get('/jogadores/novo', verificaUserLogado, (req, res) => {
 app.post('/jogadores', verificaUserLogado, (req, res) => {
   const { nome, nick, funcao, elo, genero, equipeId } = req.body;
 
-  // validação server-side
+  // validação
   if (!nome?.trim() || !nick?.trim() || !funcao || !elo || !genero || !equipeId) {
     return res.send(renderBasePage('Erro - Cadastro Jogador', `<div class="alert alert-danger">Todos os campos são obrigatórios.</div><a class="btn btn-secondary" href="/jogadores/novo">Voltar</a>`));
   }
@@ -268,7 +265,7 @@ app.post('/jogadores', verificaUserLogado, (req, res) => {
     return res.send(renderBasePage('Erro - Cadastro Jogador', `<div class="alert alert-danger">Equipe selecionada inválida.</div><a class="btn btn-secondary" href="/jogadores/novo">Voltar</a>`));
   }
 
-  // Verificar limite de 5 jogadores por equipe
+  // Verificar limite de jogador
   const qtd = jogadores.filter(j => j.equipeId === Number(equipeId)).length;
   if (qtd >= 5) {
     return res.send(renderBasePage('Erro - Cadastro Jogador', `<div class="alert alert-danger">A equipe "${equipe.nome}" já possui 5 jogadores cadastrados.</div><a class="btn btn-secondary" href="/jogadores/listar">Ver jogadores</a>`));
@@ -309,9 +306,6 @@ app.get('/jogadores/listar', verificaUserLogado, (req, res) => {
 
   res.send(renderBasePage('Lista de Jogadores', html));
 });
-
-// rota health
-app.get('/health', (req, res) => res.send('OK'));
 
 app.listen(porta, host, () => {
   console.log(`Servidor rodando em http://${host}:${porta}`);
