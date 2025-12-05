@@ -1,5 +1,32 @@
 {
+  "name": "reajuste-salarial",
+  "version": "1.0.0",
+  "description": "Primeiro programa para a internet usando node + express",
+  "keywords": [
+    "http",
+    "express",
+    "node",
+    "PPi"
+  ],
+  "homepage": "https://github.com/Matheus438/reajuste-salarial#readme",
+  "bugs": {
+    "url": "https://github.com/Matheus438/reajuste-salarial/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Matheus438/reajuste-salarial.git"
+  },
+  "license": "ISC",
+  "author": "Matheus Bispo",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
   "dependencies": {
-    "express": "^5.2.1"
+    "express": "^5.1.0",
+    "cookie-parser": "^1.4.6",
+    "express-session": "^1.17.3"
   }
 }
