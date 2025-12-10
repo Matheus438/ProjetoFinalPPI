@@ -1,5 +1,5 @@
 {
-  "name": "reajuste-salarial",
+  "name": "ProjetoFinalPPI",
   "version": "1.0.0",
   "description": "Primeiro programa para a internet usando node + express",
   "keywords": [
@@ -8,13 +8,13 @@
     "node",
     "PPi"
   ],
-  "homepage": "https://github.com/Matheus438/reajuste-salarial#readme",
+  "homepage": "https://github.com/Matheus438/ProjetoFinalPPI#readme",
   "bugs": {
-    "url": "https://github.com/Matheus438/reajuste-salarial/issues"
+    "url": "https://github.com/Matheus438/ProjetoFinalPPI/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Matheus438/reajuste-salarial.git"
+    "url": "git+https://github.com/Matheus438/ProjetoFinalPPI.git"
   },
   "license": "ISC",
   "author": "Matheus Bispo",
